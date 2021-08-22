@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,13 +20,14 @@ import com.example.instagram_clone.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
-    Button logout_btn, createPost_btn;
     private BottomNavigationView bottomNavigationView;
     final FragmentManager fragmentManager = getSupportFragmentManager();
-
-
 
     public final String TAG = "MainActivity";
 
@@ -34,21 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        logout_btn = findViewById(R.id.logout_btn);
-//        createPost_btn = findViewById(R.id.createPost_btn);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-//        logout_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ParseUser.logOut();
-//                ParseUser currentUser = ParseUser.getCurrentUser();
-//                if (currentUser == null){
-//                    Log.i(TAG, "Successfully logged out");
-//                    goToLogIn();
-//                }
-//            }
-//        });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
@@ -74,22 +62,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         bottomNavigationView.setSelectedItemId(R.id.action_home);
-
-//        createPost_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                goToCreatePost();
-//            }
-//        });
-    }
-
-    private void goToLogIn() {
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
-    }
-
-    private void goToCreatePost() {
-        Intent i = new Intent(this, CreatePost.class);
-        startActivity(i);
     }
 }

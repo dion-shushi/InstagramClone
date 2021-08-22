@@ -7,11 +7,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.instagram_clone.Post;
 import com.example.instagram_clone.PostsAdapter;
@@ -34,6 +36,7 @@ public class PostsFragment extends Fragment {
     protected RecyclerView rv_posts;
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
+    private SwipeRefreshLayout swipeContainer;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -98,6 +101,38 @@ public class PostsFragment extends Fragment {
         rv_posts.setAdapter(adapter);
         // set the layout manager on the rv
         rv_posts.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                fetchTimelineAsync(0);
+            }
+
+            private void fetchTimelineAsync(int page) {
+                // Send the network request to fetch the updated data
+                // `client` here is an instance of Android Async HTTP
+                // getHomeTimeline is an example endpoint.
+                adapter.clear();
+                queryPosts();
+                swipeContainer.setRefreshing(false);
+                Toast.makeText(view.getContext(), "Refreshed", Toast.LENGTH_LONG).show();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+
         queryPosts();
     }
 
